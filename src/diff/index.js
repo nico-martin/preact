@@ -242,7 +242,6 @@ export function diff(
 		 * When ErrorBoundary catches the Throw and tries to render something different
 		 * it will result in a fail since the children vnode will be equal.
 		 */
-		console.log('caught', e);
 		newVNode._original = null;
 		options._catchError(e, newVNode, oldVNode);
 	}
