@@ -122,11 +122,11 @@ export function diff(
 				if (
 					(!c._force &&
 						c.shouldComponentUpdate != null &&
-							c.shouldComponentUpdate(
-								newProps,
-								c._nextState,
-								componentContext
-							) === false) ||
+						c.shouldComponentUpdate(
+							newProps,
+							c._nextState,
+							componentContext
+						) === false) ||
 					(newVNode._original === oldVNode._original && !c._processingException)
 				) {
 					c.props = newProps;
@@ -231,6 +231,18 @@ export function diff(
 
 		if ((tmp = options.diffed)) tmp(newVNode);
 	} catch (e) {
+		/**
+		 * We reset ._original here for the following scenario:
+		 * const App = () => (
+		 * 	<ErrorBoundary>
+		 * 		<Throw />
+		 *  </ErrorBoundary>
+		 * )
+		 *
+		 * When ErrorBoundary catches the Throw and tries to render something different
+		 * it will result in a fail since the children vnode will be equal.
+		 */
+		console.log('caught', e);
 		newVNode._original = null;
 		options._catchError(e, newVNode, oldVNode);
 	}
